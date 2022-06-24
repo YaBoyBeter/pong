@@ -2,6 +2,22 @@
     "Lua.diagnostics.globals": [
         "love",
         "push",
-        "class"
-    ]
+        "class",
+        "smallFont",
+        "player1Score",
+        "player2Score",
+        "player1Y",
+        "player2Y",
+        "scoreFont",
+        "ballX",
+        "ballY",
+        "ballDX",
+        "ballDY",
+        "gameState"
+    ],
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.workspace.library": [
+        "${3rd}/love2d/library"
+    ],
+    "Lua.workspace.checkThirdParty": false
 }

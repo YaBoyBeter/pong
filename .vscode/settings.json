@@ -13,7 +13,11 @@
         "ballY",
         "ballDX",
         "ballDY",
-        "gameState"
+        "gameState",
+        "Class",
+        "player1",
+        "player2",
+        "ball"
     ],
     "Lua.runtime.version": "LuaJIT",
     "Lua.workspace.library": [

@@ -16,6 +16,9 @@ PADDLE_SPEED = 200
 push = require 'push'
 class = require 'class'
 
+require 'Paddle'
+require 'Ball'
+
 -- Called once at application start, used to initialize the game
 function love.load()
     -- Removes bluring of text and graphics
@@ -38,21 +41,10 @@ function love.load()
         vsync = true
     })
 
-    player1Score = 0
-    player2Score = 0
+    player1 = Paddle(10, 30, 5, 20)
+    player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
 
-    -- Paddle positions on Y
-    player1Y = 30
-    player2Y = VIRTUAL_HEIGHT - 50
-
-    -- Ball X and Y positions
-    ballX = VIRTUAL_WIDTH / 2 - 2
-    ballY = VIRTUAL_HEIGHT / 2 - 2
-
-    -- Ball Velocity
-    ballDX = math.random(2) == 1 and 100 or -100
-    ballDY = math.random(-50, 50)
-
+    ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
     gameState  = 'start'
 end
@@ -64,28 +56,34 @@ function love.update(dt)
     if love.keyboard.isDown('w') then
         -- If w pressed add negative Y
         -- Until Y reaches the negative bounds (top) of the screen
-        player1Y = math.max(0, player1Y + -PADDLE_SPEED * dt)
+        player1.dy = -PADDLE_SPEED
     elseif love.keyboard.isDown('s') then
         -- If s pressed add positive Y
         -- Until Y reaches the positive bounds (bottom) of the screen
-        player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + PADDLE_SPEED * dt)
+        player1.dy = PADDLE_SPEED
+    else
+        player1.dy = 0
     end
 
     -- PLAYER 2 CONTROLS
     if love.keyboard.isDown('up') then
         -- If up pressed add negative Y
         -- Until Y reaches the negative bounds (top) of the screen
-        player2Y = math.max(0, player2Y + -PADDLE_SPEED * dt)
+       player2.dy = -PADDLE_SPEED
     elseif love.keyboard.isDown('down') then
         -- If down pressed add positive Y
         -- Until Y reaches the positive bounds (bottom) of the screen
-        player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
+        player2.dy = PADDLE_SPEED
+    else
+        player2.dy = 0
     end
 
     if gameState == 'play'  then
-        ballX = ballX + ballDX * dt
-        ballY = ballY + ballDY * dt
+        ball:update(dt)
     end
+
+    player1:update(dt)
+    player2:update(dt)
 end
 
 -- LOVE2D keyboard handling
@@ -93,19 +91,15 @@ function love.keypressed(key)
     if key == 'escape' then
         -- Close application
         love.event.quit()
+        -- During start state pressing enter will move to play state
+        -- Moving the ball in a random direction
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
         else 
             gameState = 'start'
             
-            -- Start ball at center screen
-            ballX = VIRTUAL_WIDTH / 2 - 2
-            ballY = VIRTUAL_HEIGHT / 2 - 2
-
-            -- Set ball velocity for game start
-            ballDX = math.random(2) == 1 and 100 or -100
-            ballDY = math.random(-50, 50) * 1.5
+            ball:reset()
         end
     end
 end
@@ -121,7 +115,6 @@ function love.draw()
 
     -- Prints welcome text to the top of the screen
     love.graphics.setFont(smallFont)
-    love.graphics.printf('Hello Pong', 0, 20, VIRTUAL_WIDTH, 'center')
 
     -- Print Score fonts to first and third quarter of the screen
     love.graphics.setFont(scoreFont)
@@ -129,12 +122,11 @@ function love.draw()
     love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
 
     -- RENDER PADDLE AND BALL
-    -- Left paddle (player1)
-    love.graphics.rectangle('fill', 10, player1Y, 5, 20)
-    -- Right paddle (player 2)
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
-    -- Ball
-    love.graphics.rectangle('fill', ballX, ballY, 4, 4)
+    --Render paddles
+    player1:render()
+    player2:render()
+    -- Render ball
+    ball:render()
 
     -- End rendering at virtual resolution
     push:finish()

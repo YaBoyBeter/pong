@@ -5,17 +5,16 @@
     Twitter: @YaBoyBeter
 ]]--
 
-Paddle = Class{}
+Paddle = Class() {
+    init = function (x, y, width, height)
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
-function Paddle:init(x, y, width, height)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
-
-    self.dy = 0
-end
-
+        self.dy = 0
+    end
+}
 function Paddle:update()
     if self.dy < 0 then
         -- Keeps paddle y at the greater of 0 or the players curreent calculated y

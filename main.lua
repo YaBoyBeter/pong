@@ -13,8 +13,10 @@ VIRTUAL_HEIGHT = 243
 
 PADDLE_SPEED = 200
 
+-- https://github.com/Ulydev/push
 push = require 'push'
-class = require 'class'
+-- https://github.com/vrld/hump/blob/master/class.lua
+Class = require 'class'
 
 require 'Paddle'
 require 'Ball'

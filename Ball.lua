@@ -5,19 +5,18 @@
     Twitter: @YaBoyBeter
 ]]--
 
-Ball = Class {}
+Ball = Class() {
+    init = function (x, y, width, height)
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
-
-function Ball:init(x, y, width, height)
-    self.x = x
-    self.y = y
-    self.width = width
-    self.height = height
-
-    -- Velocity variables
-    self.dy = math.random(2) == 1 and 100 or -100
-    self.dx = math.random(-50, 50)
-end
+        -- Velocity variables
+        self.dy = math.random(2) == 1 and 100 or -100
+        self.dx = math.random(-50, 50)
+    end
+}
 
 function Ball:reset()
     self.x = VIRTUAL_WIDTH / 2 - 2

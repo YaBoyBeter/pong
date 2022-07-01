@@ -96,7 +96,7 @@ function love.keypressed(key)
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
-        else 
+        else
             gameState = 'start'
             
             ball:reset()
